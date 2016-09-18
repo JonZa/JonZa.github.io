@@ -793,6 +793,8 @@ $().ready(function() {
 			toggleControls();
 		}
 	});
+	// rescrollify
+	$.scrollify.update();
 	// start preloading
 	startLoading();
 });
