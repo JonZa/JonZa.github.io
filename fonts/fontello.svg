@@ -1,0 +1,16 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg">
+<metadata>Copyright (C) 2016 by original authors @ fontello.com</metadata>
+<defs>
+<font id="fontello" horiz-adv-x="1000" >
+<font-face font-family="fontello" font-weight="400" font-stretch="normal" units-per-em="1000" ascent="850" descent="-150" />
+<missing-glyph horiz-adv-x="1000" />
+<glyph glyph-name="music-outline" unicode="&#xe800;" d="M729 797q42 0 74-31t31-73l0-529q0-86-70-147t-165-61q-93 0-159 57-30-50-85-80t-120-29q-96 0-166 61t-69 148q0 66 44 120t112 76l0 318q0 40 27 69t65 34l468 65q2 0 7 1t6 1z m-313-633q0 59 45 103t112 52l0 90-157-22 0-223z m313 0l0 529-469-66 0-413q-17 3-25 3-55 0-93-31t-38-73q0-44 39-75t92-30 92 30 38 75l0 319 260 38 0-203q-17 2-26 2-54 0-92-31t-38-74 38-74 92-30 92 30 38 74z" horiz-adv-x="834" />
+
+<glyph glyph-name="music" unicode="&#xe801;" d="M753 794q11 2 20-6t8-20l0-629q0-53-45-91t-111-39-111 39-45 91 45 93 111 39l0 193-312-32 0-396q0-54-46-92t-111-38-110 38-46 92 46 92 110 38l0 537q0 10 7 18t16 8z" horiz-adv-x="781" />
+
+<glyph glyph-name="direction" unicode="&#xe802;" d="M328 47l-71 214-214 71q-27 9-37 23t-2 28 34 27l593 276q40 17 54 3t-3-54l-278-593q-11-26-25-34t-28 2-23 37z" horiz-adv-x="691" />
+</font>
+</defs>
+</svg>
