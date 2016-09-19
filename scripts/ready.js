@@ -150,7 +150,7 @@ var vars = {
 		x: 25,
 		y: 25
 	}],
-	death: [{
+	spawn: [{
 		x: 3,
 		y: 12
 	}],
@@ -190,7 +190,6 @@ var draw = {
 		draw.tiles();
 		draw.dude();
 		draw.movement();
-		toggleControls();
 	},
 	start: function() {
 		foo('draw.setup',1)
@@ -259,20 +258,20 @@ var draw = {
 				}
 			}
 		}
-		// death
-		var $death = gameLayer.find('.poly_' + vars.death[0].y + '_' + vars.death[0].x).fill('#fff');
+		// spawn
+		var $spawn = gameLayer.find('.poly_' + vars.spawn[0].y + '_' + vars.spawn[0].x).fill('#fff');
 		if (vars.direction.new === 'down') {
-			vars.death[0].y -= 1;
-			vars.death[0].x -= vars.death[0].y % 2;
+			vars.spawn[0].y -= 1;
+			vars.spawn[0].x -= vars.spawn[0].y % 2;
 		} else if (vars.direction.new === 'up') {
-			vars.death[0].x += vars.death[0].y % 2;
-			vars.death[0].y += 1;
+			vars.spawn[0].x += vars.spawn[0].y % 2;
+			vars.spawn[0].y += 1;
 		} else if (vars.direction.new === 'right') {
-			vars.death[0].y += 1;
-			vars.death[0].x -= vars.death[0].y % 2;
+			vars.spawn[0].y += 1;
+			vars.spawn[0].x -= vars.spawn[0].y % 2;
 		} else if (vars.direction.new === 'left') {
-			vars.death[0].x += vars.death[0].y % 2;
-			vars.death[0].y -= 1;
+			vars.spawn[0].x += vars.spawn[0].y % 2;
+			vars.spawn[0].y -= 1;
 		}
 		// money
 		gameLayer.find('.money').remove();
@@ -586,22 +585,22 @@ var messages = {
 		'Ninja! Fwoop fwoop.',
 		'Where am I going?',
 		'What am I doing?',
-		'What would a drunk cat be like?',
 		'What is the point of this?',
 		'Must. Buy. More. Sneakers.',
 		'Must. Not. Buy. More. Sneakers.',
-		'Bills. Bills. Bills. Bills.',
+		'Bills. Bills. Bills.',
 		'Where is my dinner in pill form?',
 		'When does this end? Does it end?',
 		'Where is my cure for this disease?',
 		'This was supposed to be the future.',
 		'There are so many chairs everywhere.',
-		'Telephone bills...',
+		'Telepho\' bills...',
 		'Automo\' bills...',
 		'Idle hands are the devil\'s plaything.',
 		'Asereje, ja deje tejebe tude jebere...',
 		'Where is my hydrogen fueled automobile?',
 		'So. Very. Tired.',
+		'Friday, Friday, gotta get down on Friday.',
 		'Gotta find myself some gainful employment.',
 		'All work and no play makes Jon a dull boy.',
 		'An electricity bill? Thanks a lot, science.',
@@ -623,6 +622,7 @@ var messages = {
 		'The cats need new mittens',
 		'Kaizen.',
 		'Parklife!',
+		'We all go hand in hand...',
 		'I\'m feeling supersonic',
 		'\'Vorsprung durch Technik\''
 	],
@@ -681,6 +681,7 @@ var messages = {
 		'Contests for ^Ernst Young',
 		'Google maps system for ^Glencore-Xstrata',
 		'Google map system for ^Rouse',
+		'Site templates for ^Fort Group',
 		'Annual reports for ^Land Securities',
 		'Site templates for ^Murata',
 		'Responsive templates for ^Orrick',
@@ -703,6 +704,7 @@ var messages = {
 		'Meal builder web app for ^Naspers',
 		'Site design for ^Marine Parade',
 		'Site template for ^Marine Parade',
+		'Promo site designs for ^Elizabeth Arden',
 		'Audio player for ^Marine Parade'
 	]
 }
@@ -715,6 +717,7 @@ function toggleControls() {
 	foo('toggleControls',1)
 	$controls.removeClass('active').filter('[id="' + vars.direction.new + '"]').addClass('active');
 }
+toggleControls();
 // modal defaults
 $.modal.defaults.closeText = '*';
 $.modal.defaults.fadeDuration = 150,

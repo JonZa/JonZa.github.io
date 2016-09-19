@@ -8,3 +8,7 @@ _Includes:_
   * Career Simulator 3D Game
   * Project Showcase
   * Contact Details
+
+_To do:_
+
+  * Further browser testing
