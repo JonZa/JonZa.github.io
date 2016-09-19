@@ -720,7 +720,17 @@ function toggleControls() {
 toggleControls();
 // modal defaults
 $.modal.defaults.closeText = '*';
-$.modal.defaults.fadeDuration = 150,
+$.modal.defaults.fadeDuration = 150;
+// update scrollify
+$.scrollify({
+	after: function() {
+		if ($.scrollify.current().attr('id') !== 'gameSection') {
+			onBlur();
+		} else {
+			onFocus();
+		}
+	}
+});
 // go go go
 $().ready(function() {
 	$controls.click(
@@ -744,6 +754,13 @@ $().ready(function() {
 			var oldHtml = $this.html();
 			var newHtml = $this.attr('data-alt');
 			$this.html(newHtml).attr('data-alt',oldHtml)
+		}
+	);
+	$.each(
+		$('img[data-file]'),
+		function(i,elem) {
+			var $img = $(elem);
+			$img.attr('src',$img.attr('data-file'))
 		}
 	);
 	$('a[data-game="start"]').on(
