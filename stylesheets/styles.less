@@ -35,7 +35,11 @@ a {
 	}
 }
 .section {
-	display: flex;
+	display: -o-flex;
+	display: -ms-flex;
+	display: -moz-flex;
+	display: -webkit-flex;
+	display: inline-flex;
 	align-items: center;
 	> div {
 		width: 100%;
