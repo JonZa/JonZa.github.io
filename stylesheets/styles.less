@@ -82,13 +82,11 @@ a {
 .row {
 	display: flex;
 	padding-bottom: 10px;
+	align-items: flex-start;
+	margin: 0 -10px;
 	.column {
 		width: 50%;
-		padding-left: 15px;
-	}
-	.column:first-child {
-		padding-left: 0;
-		padding-right: 15px;
+		padding: 0 10px;
 	}
 }
 // modal
@@ -132,28 +130,23 @@ a {
 		display: block;
 		background: #fff;
 		padding: 5px;
+		line-height: 20px;
 		&:active,
 		&:focus,
 		&:hover {
-			background: transparent;
+			text-decoration: none;
+			img {
+				opacity: 0.8;
+			}
 		}
 		img {
 			max-width: 100%;
+			margin-top: 5px;
 		}
 	}
 	.content {
 		padding: 50px 10px;
 		max-width: 512px;
-	}
-	a {
-		background: #fff;
-		padding: 0 5px;
-		&:active,
-		&:focus,
-		&:hover {
-			background: transparent;
-			text-decoration: none;
-		}
 	}
 	h1 {
 		font-size: 30px;
