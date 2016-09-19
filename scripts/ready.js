@@ -190,6 +190,7 @@ var draw = {
 		draw.tiles();
 		draw.dude();
 		draw.movement();
+		$('a[data-game="start"]').text('start');
 	},
 	start: function() {
 		foo('draw.setup',1)
@@ -769,7 +770,7 @@ $().ready(function() {
 			e.preventDefault();
 			var $this = $(this);
 			$this.closest('.content').find('.off').removeClass('off');
-			$this.parent().addClass('off');
+			$this.remove();
 			draw.start();
 		}
 	);
