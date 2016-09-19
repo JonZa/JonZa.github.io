@@ -29,17 +29,17 @@ function shuffle(array) {
 }
 // mute audio on scroll away
 function onBlur() {
-	// sounds.footsteps.mute(true)
-	// sounds.cat.mute(true)
-	// sounds.pickup.mute(true)
+	sounds.footsteps.mute(true)
+	sounds.cat.mute(true)
+	sounds.pickup.mute(true)
 }
 // unmute audio on scroll away
 function onFocus() {
 	if (!vars.isMuted) {
 		var notGameSection = ($.scrollify.current().attr('id') !== 'gameSection');
-		// sounds.footsteps.mute(notGameSection)
-		// sounds.cat.mute(notGameSection)
-		// sounds.pickup.mute(notGameSection)
+		sounds.footsteps.mute(notGameSection)
+		sounds.cat.mute(notGameSection)
+		sounds.pickup.mute(notGameSection)
 	}
 }
 if (/*@cc_on!@*/false) { // check for Internet Explorer
@@ -195,14 +195,14 @@ var draw = {
 		foo('draw.setup',1)
 		vars.started = 1;
 		dude.start();
-		// sounds.begin.play();
-		// setTimeout(
-		// 	function() {
-		// 		sounds.cat.play('loop');
-		// 	}
-		// 	,500
-		// ),
-		// sounds.footsteps.play();
+		sounds.begin.play();
+		setTimeout(
+			function() {
+				sounds.cat.play('loop');
+			}
+			,500
+		),
+		sounds.footsteps.play();
 		draw.next();
 	},
 	next: function() {
@@ -333,7 +333,7 @@ var draw = {
 			}
 			score = value * multiplier;
 			if (score > 0) {
-				// sounds.pickup.play();
+				sounds.pickup.play();
 				vars.money[i].x = -1;
 				vars.money[i].y = -1;
 				var tween = new Konva.Tween({
@@ -389,8 +389,8 @@ var draw = {
 	score: function(html) {
 		foo('draw.score',1)
 		var modifier = 1 + vars.score / 1000;
-		// sounds.cat.rate(modifier)
-		// sounds.footsteps.rate(modifier)
+		sounds.cat.rate(modifier)
+		sounds.footsteps.rate(modifier)
 		dude.frameRate = 7 + modifier * 10;
 		cnsts.$score.html(html);
 		clearTimeout(vars.timeouts.scoreUpdate);
@@ -485,8 +485,7 @@ var draw = {
 	}
 }
 // load
-var notLoaded = 1;
-/*
+var notLoaded = 2;
 var sounds = {
 	toLoad: 4,
 	begin: new Howl({
@@ -532,7 +531,6 @@ var sounds = {
 		}
 	}
 }
-*/
 var images = {
 	dude: 'images/dude.gif',
 	money1: 'images/money-1.gif',
@@ -766,9 +764,9 @@ $().ready(function() {
 			var $this = $(this);
 			$this.toggleClass('active');
 			vars.isMuted = !vars.isMuted;
-			// sounds.footsteps.mute(vars.isMuted)
-			// sounds.cat.mute(vars.isMuted)
-			// sounds.pickup.mute(vars.isMuted)
+			sounds.footsteps.mute(vars.isMuted)
+			sounds.cat.mute(vars.isMuted)
+			sounds.pickup.mute(vars.isMuted)
 		}
 	);
 	// keypress
