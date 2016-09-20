@@ -61,6 +61,9 @@ a {
 		color: @dark-red;
 	}
 }
+strong {
+	font-weight: bold;
+}
 .flex {
 	display: -ms-flexbox;
 	display: -webkit-flex;
@@ -131,10 +134,10 @@ a {
 		background: #fff;
 		padding: 5px;
 		line-height: 20px;
+		text-decoration: none;
 		&:active,
 		&:focus,
 		&:hover {
-			text-decoration: none;
 			img {
 				opacity: 0.8;
 			}
@@ -228,21 +231,19 @@ hr {
 		top: -4px;
 	}
 	h1 {
-		margin-bottom: 10px;
-		font-size: 40px;
-		line-height: 32px;
-		text-shadow: 2px 2px 0 #fff;
-		span {
-			font-size: 32px;
-		}
-	}
-	h2 {
-		margin-bottom: 10px;
 		font-size: 32px;
+		line-height: 24px;
+		text-shadow: 2px 2px 0 #fff;
 		span {
 			font-size: 24px;
 		}
-		line-height: 32px;
+	}
+	h2 {
+		font-size: 24px;
+		line-height: 24px;
+		span {
+			font-size: 16px;
+		}
 	}
 	p, ul {
 		margin-bottom: 10px;
@@ -298,7 +299,6 @@ hr {
 }
 // game
 .game {
-	// background: #923;
 	color: #fff;
 	font-family: 'Silkscreen';
 	letter-spacing: -2px;
@@ -529,15 +529,12 @@ hr {
 	}
 	h1 {
 		color: #ff9;
-		font-size: 32px;
-		line-height: 32px;
+		font-size: 24px;
+		line-height: 24px;
 		text-transform: uppercase;
 		text-align: center;
 		position: relative;
 		z-index: 2;
-		small {
-			font-size: 24px;
-		}
 	}
 	blockquote {
 		color: #000;
@@ -627,6 +624,30 @@ hr {
 		}
 		h1 {
 			padding: 5px 0;
+			font-size: 32px;
+			line-height: 32px;
+			small {
+				font-size: 24px;
+			}
+		}
+	}
+	.blurb {
+		h1, h2 {
+			margin-bottom: 10px;
+		}
+		h1 {
+			font-size: 40px;
+			line-height: 32px;
+			span {
+				font-size: 32px;
+			}
+		}
+		h2 {
+			font-size: 32px;
+			span {
+				font-size: 24px;
+			}
+			line-height: 32px;
 		}
 	}
 }
@@ -634,7 +655,7 @@ hr {
 	background: @med-blue;
 }
 .pixel-blue {
-	background: url(../images/pixel-blue.png) no-repeat;
+	background: #cdf url(../images/pixel-blue.png) no-repeat;
 }
 .pixel-blue.light {
 	background-position: bottom center;
