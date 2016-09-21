@@ -101,10 +101,6 @@ strong {
 		font-size: 17px;
 		line-height: 22px;
 	}
-	strong {
-		background: #edc;
-		padding: 0 2px;
-	}
 	.img {
 		a {
 			text-decoration: none;
@@ -314,7 +310,7 @@ hr {
 	}
 	.container {
 		position: relative;
-		height: 400px;
+		height: 415px;
 	}
 	#canvas {
 		background: @dark-blue;
@@ -459,8 +455,8 @@ hr {
 		bottom: 5px;
 		right: 20px;
 		z-index: 2;
-		width: 78px;
-		height: 78px;
+		width: 88px;
+		height: 88px;
 		font-weight: bold;
 		a {
 			background: @med-red;
@@ -468,10 +464,9 @@ hr {
 			box-shadow: 0 0 3px 0 #000, inset -2px -2px 3px 1px rgba(0,0,0,0.5), inset 2px 2px 3px 1px rgba(255,255,255,0.5);
 			display: block;
 			position: absolute;
-			width: 31px;
-			height: 31px;
-			line-height: 31px;
-			border-radius: 31px;
+			width: 35px;
+			height: 35px;
+			border-radius: 100%;
 			color: #fff;
 			text-decoration: none;
 			&.active,
@@ -492,8 +487,8 @@ hr {
 			bottom: 0;
 			span {
 				text-shadow: -2px -2px 0px @dark-red;
-				left: 6px;
-				bottom: 7px;
+				left: 8px;
+				bottom: 9px;
 				transform: scale(-1, -1);
 			}
 		}
@@ -502,8 +497,8 @@ hr {
 			bottom: 0;
 			span {
 				text-shadow: 2px -2px 0px @dark-red;
-				bottom: 7px;
-				right: 6px;
+				bottom: 9px;
+				right: 8px;
 				transform: scale(1, -1);
 			}
 		}
@@ -512,8 +507,8 @@ hr {
 			top: 0;
 			span {
 				text-shadow: 2px 2px 0px @dark-red;
-				right: 6px;
-				top: 7px;
+				right: 8px;
+				top: 9px;
 			}
 		}
 		#up {
@@ -521,8 +516,8 @@ hr {
 			top: 0;
 			span {
 				text-shadow: -2px 2px 0px @dark-red;
-				left: 6px;
-				top: 7px;
+				left: 8px;
+				top: 9px;
 				transform: scale(-1, 1);
 			}
 		}
@@ -613,14 +608,61 @@ hr {
 		}
 	}
 }
+.hi {
+	position: fixed;
+	z-index: 1;
+	top: 8px;
+	right: 8px;
+	width: 35px;
+	height: 35px;
+	background: #fff;
+	border-radius: 100%;
+	text-decoration: none;
+	span {
+		position: absolute;
+		display: block;
+	}
+	.icon {
+		color: @dark-red;
+		font-size: 25px;
+		bottom: 5px;
+		left: 1px;
+		color: #000;
+	}
+	.one {
+		font-size: 12px;
+		background: #c33;
+		border-radius: 2px;
+		color: #fff;
+		padding: 3px;
+		top: -3px;
+		right: -3px;
+	}
+}
+@media screen and (min-width: 700px) and (min-height: 490px) {
+	.hi {
+		top: 60px;
+		right: 60px;
+		width: 55px;
+		height: 55px;
+		.icon {
+			font-size: 36px;
+			left: 3px;
+			bottom: 10px;
+		}
+		.one {
+			font-size: 16px;
+			padding: 5px;
+			top: -7px;
+			right: -7px;
+		}
+	}
+}
 @media screen and (min-height: 490px) {
 	.game {
 		max-height: 490px;
 		.content {
 			height: 490px;
-		}
-		.container {
-			height: 410px;
 		}
 		h1 {
 			padding: 5px 0;
