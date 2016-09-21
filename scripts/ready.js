@@ -774,6 +774,14 @@ $().ready(function() {
 			draw.start();
 		}
 	);
+	$('a.hi').on(
+		'click',
+		function(e) {
+			e.preventDefault();
+			var $this = $(this);
+			$this.find('.one').remove();
+		}
+	);
 	$('a[data-game="mute"]').on(
 		'click',
 		function(e) {
