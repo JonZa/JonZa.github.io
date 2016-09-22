@@ -770,7 +770,7 @@ $().ready(function() {
 			e.preventDefault();
 			var $this = $(this);
 			$this.closest('.content').find('.off').removeClass('off');
-			$this.remove();
+			$this.parent().remove();
 			draw.start();
 		}
 	);
