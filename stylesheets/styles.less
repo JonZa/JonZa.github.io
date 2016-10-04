@@ -6,6 +6,7 @@
 @med-blue: #023;
 @dark-red: #500;
 @med-red: #900;
+@light-red: #b00;
 // pixel font
 @font-face {
 	font-family: 'Silkscreen';
@@ -255,16 +256,16 @@ hr {
 			2px 2px 0 #024;
 		a {
 			border: 2px solid #fff;
-			box-shadow: 0px 0px 0px 5px rgba(255,255,255,0.25);
 			display: block;
 			padding: 20px;
 			background:  rgba(0,17,34,0.75);
-			color: #fff;
+			color: #ff9;
 			text-decoration: none;
 			&:active,
 			&:focus,
 			&:hover {
 				background: @med-blue;
+				color: #fff;
 			}
 		}
 		z-index: 2;
@@ -621,13 +622,14 @@ hr {
 		color: #000;
 	}
 	.one {
+		border: 1px solid @light-red;
 		font-size: 12px;
 		background: #c33;
 		border-radius: 2px;
 		color: #fff;
 		padding: 3px;
-		top: -3px;
-		right: -3px;
+		top: -4px;
+		right: -4px;
 	}
 }
 // media queries
@@ -643,10 +645,11 @@ hr {
 			bottom: 10px;
 		}
 		.one {
+			border-width: 2px;
 			font-size: 16px;
 			padding: 5px;
-			top: -7px;
-			right: -7px;
+			top: -9px;
+			right: -6px;
 		}
 	}
 }
