@@ -421,7 +421,7 @@ hr {
 		}
 	}
 	blockquote {
-		color: #000;
+		color: @dark-blue;
 		width: 160px;
 		line-height: 20px;
 		font-size: 16px;
@@ -440,7 +440,10 @@ hr {
 			padding: 0 10px;
 			margin: -5px 0;
 		}
-		span {
+		span:first-child {
+			color: @med-blue;
+		}
+		span:last-child {
 			color: @med-red;
 		}
 		&.thought {

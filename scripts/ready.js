@@ -1,32 +1,7 @@
-// plugin
-function foo(bar, fly) {
-	var paranoid = 0;
-	if (!window.console || (fly && !paranoid)) {
-		return false;
-	} else if (bar === undefined || bar === null) {
-		bar = 'o_O';
-	}
-	var time = new Date().toUTCString().split(' ')[4];
-	if (typeof bar === 'object') {
-		console.log('[' + time + '] object:');
-		console.dir(bar);
-	} else {
-		console.log('[' + time + '] ' + bar);
-	}
-}
-// useful
-function shuffle(array) {
-	var currentIndex = array.length,
-		temporaryValue, randomIndex;
-	while (0 !== currentIndex) {
-		randomIndex = Math.floor(Math.random() * currentIndex);
-		currentIndex -= 1;
-		temporaryValue = array[currentIndex];
-		array[currentIndex] = array[randomIndex];
-		array[randomIndex] = temporaryValue;
-	}
-	return array;
-}
+// foo
+function foo(a,b){var c=0;if(!window.console||b&&!c)return!1;(void 0===a||null===a)&&(a='o_O');var d=(new Date).toUTCString().split(' ')[4];'object'==typeof a?(console.log('['+d+'] object:'),console.dir(a)):console.log('['+d+'] '+a)}
+// shuffle
+function shuffle(a){for(var c,d,b=a.length;0!==b;)d=Math.floor(Math.random()*b),b-=1,c=a[b],a[b]=a[d],a[d]=c;return a}
 // mute audio on scroll away
 function onBlur() {
 	sounds.footsteps.mute(true)
@@ -49,8 +24,6 @@ if (/*@cc_on!@*/false) { // check for Internet Explorer
 	window.onfocus = onFocus;
 	window.onblur = onBlur;
 }
-// game & canvas stuff
-var $canvas = $('#canvas');
 // constants
 var cnsts = {
 	colors: ['#cd8', '#de9'],
@@ -110,21 +83,7 @@ var cnsts = {
 	dude: {
 		width: 60,
 		height: 60
-	},
-	months: [
-		'Jan',
-		'Feb',
-		'Mar',
-		'Apr',
-		'May',
-		'Jun',
-		'Jul',
-		'Aug',
-		'Sep',
-		'Oct',
-		'Nov',
-		'Dec'
-	]
+	}
 }
 // variables
 var vars = {
@@ -139,34 +98,33 @@ var vars = {
 	sinceMoney: 0,
 	money: [{
 		x: 1,
-		y: 5
+		y: 8
 	}, {
-		x: 4,
-		y: 7
+		x: 5,
+		y: 8
 	}, {
 		x: 5,
 		y: 16
 	}, {
 		x: 1,
-		y: 17
+		y: 16
 	}],
-	spawn: [{
+	spawn: {
 		x: 3,
 		y: 12
-	}],
+	},
 	timeouts: {
 		bubbleFade: 0,
 		scoreUpdate: 0
 	}
 }
-// konva stuff
-var $canvasWidth = $canvas.width();
-var $canvasHeight = $canvas.height();
+// konva stage
 var stage = new Konva.Stage({
 	container: 'canvas',
-	width: $canvasWidth,
-	height: $canvasHeight
+	width: cnsts.game.width,
+	height: cnsts.game.height
 });
+// konva game layer
 var gameLayer = new Konva.Layer({
 	x: 0,
 	y: 0,
@@ -178,22 +136,25 @@ var gameLayer = new Konva.Layer({
 	}
 });
 stage.add(gameLayer);
+// konva game group
 var gameGroup = new Konva.Group({
 	offsetX: 30,
 	offsetY: 15
 });
 var dude = new Konva.Sprite();
 // draw
-var draw = {
-	setup: function() {
-		foo('draw.setup',1)
+var game = {
+	setup: function () {
+		foo('game.setup',1)
 		draw.tiles();
 		draw.dude();
 		draw.movement();
-		$('a[data-game="start"]').text('start');
-	},
+		$('[data-game="start"]').text('start');
+	}
+}
+var draw = {
 	start: function() {
-		foo('draw.setup',1)
+		foo('draw.start',1)
 		vars.started = 1;
 		dude.start();
 		sounds.begin.play();
@@ -216,13 +177,12 @@ var draw = {
 		gameGroup.x(0);
 		gameGroup.y(0);
 		cnsts.colors.reverse();
-		var startX = 0;
-		var startY = -cnsts.rowHeight;
-		if (gameLayer.find('.poly').length === 0) {
+		if (!vars.tilesMoved) {
+			var startY = -cnsts.rowHeight;
 			for (var n = 0; n < cnsts.rows; n++) {
 				startY += cnsts.rowHeight / 2;
 				for (var m = 0; m < cnsts.cols; m++) {
-					startX = cnsts.colWidth * m + n % 2 * (cnsts.colWidth / 2);
+					var startX = cnsts.colWidth * m + n % 2 * (cnsts.colWidth / 2);
 					var poly = new Konva.Line({
 						points: [
 							startX, startY,
@@ -238,17 +198,6 @@ var draw = {
 						perfectDrawEnabled: false
 					});
 					gameGroup.add(poly);
-					/*
-					var text = new Konva.Text({
-						x: startX - 12,
-						y: startY + 7,
-						text: 'y' + n + ' x' + m,
-						fontSize: 10,
-						fontFamily: 'Share Tech Mono',
-						fill: 'green'
-					});
-					gameGroup.add(text);
-					*/
 				}
 			}
 			gameLayer.add(gameGroup);
@@ -260,19 +209,21 @@ var draw = {
 			}
 		}
 		// spawn
-		var $spawn = gameLayer.find('.poly_' + vars.spawn[0].y + '_' + vars.spawn[0].x).fill('#fff');
-		if (vars.direction.new === 'down') {
-			vars.spawn[0].y -= 1;
-			vars.spawn[0].x -= vars.spawn[0].y % 2;
-		} else if (vars.direction.new === 'up') {
-			vars.spawn[0].x += vars.spawn[0].y % 2;
-			vars.spawn[0].y += 1;
-		} else if (vars.direction.new === 'right') {
-			vars.spawn[0].y += 1;
-			vars.spawn[0].x -= vars.spawn[0].y % 2;
-		} else if (vars.direction.new === 'left') {
-			vars.spawn[0].x += vars.spawn[0].y % 2;
-			vars.spawn[0].y -= 1;
+		gameLayer.find('.poly_' + vars.spawn.y + '_' + vars.spawn.x).fill('#fff');
+		if (vars.tilesMoved > 0) {
+			if (vars.direction.new === 'down') {
+				vars.spawn.y -= 1;
+				vars.spawn.x -= vars.spawn.y % 2;
+			} else if (vars.direction.new === 'up') {
+				vars.spawn.x += vars.spawn.y % 2;
+				vars.spawn.y += 1;
+			} else if (vars.direction.new === 'right') {
+				vars.spawn.y += 1;
+				vars.spawn.x -= vars.spawn.y % 2;
+			} else if (vars.direction.new === 'left') {
+				vars.spawn.x += vars.spawn.y % 2;
+				vars.spawn.y -= 1;
+			}
 		}
 		// money
 		gameLayer.find('.money').remove();
@@ -306,18 +257,20 @@ var draw = {
 			gameLayer.find('.poly_' + (vars.money[i].y + 1) + '_' + (vars.money[i].x - (vars.money[i].y + 1) % 2)).fill('#efc');
 			gameLayer.find('.poly_' + (vars.money[i].y - 1) + '_' + (vars.money[i].x + vars.money[i].y % 2)).fill('#efc');
 
-			if (vars.direction.new === 'down') {
-				vars.money[i].y -= 1;
-				vars.money[i].x -= vars.money[i].y % 2;
-			} else if (vars.direction.new === 'up') {
-				vars.money[i].x += vars.money[i].y % 2;
-				vars.money[i].y += 1;
-			} else if (vars.direction.new === 'right') {
-				vars.money[i].y += 1;
-				vars.money[i].x -= vars.money[i].y % 2;
-			} else if (vars.direction.new === 'left') {
-				vars.money[i].x += vars.money[i].y % 2;
-				vars.money[i].y -= 1;
+			if (vars.tilesMoved > 0) {
+				if (vars.direction.new === 'down') {
+					vars.money[i].y -= 1;
+					vars.money[i].x -= vars.money[i].y % 2;
+				} else if (vars.direction.new === 'up') {
+					vars.money[i].x += vars.money[i].y % 2;
+					vars.money[i].y += 1;
+				} else if (vars.direction.new === 'right') {
+					vars.money[i].y += 1;
+					vars.money[i].x -= vars.money[i].y % 2;
+				} else if (vars.direction.new === 'left') {
+					vars.money[i].x += vars.money[i].y % 2;
+					vars.money[i].y -= 1;
+				}
 			}
 			var score = 0;
 			var playerX = Math.ceil(cnsts.cols / 2) - 1;
@@ -364,6 +317,7 @@ var draw = {
 					y = Math.floor(Math.random() * (cnsts.rows + 1));
 					for (var k = 0; k < vars.money.length; k++) {
 						if (vars.money[k].x === x && vars.money[k].y === y) {
+							foo('wat')
 							j--;
 						}
 					}
@@ -415,7 +369,6 @@ var draw = {
 			frameIndex: 0
 		});
 		gameLayer.add(dude);
-		// dude.start();
 	},
 	movement: function() {
 		foo('draw.movement',1)
@@ -464,15 +417,11 @@ var draw = {
 		var message;
 		if (type === 'speech') {
 			var exclamation = messages.exclamations[0];
-			message =  messages.speeches[0].split('^').join('<span>') + '!</span>';
-			message = exclamation + '\n' + message;
-
+			message = '<span>' + exclamation + '!</span><br>' + messages.speeches[0].split('^').join('<span>') + '!</span>';
 			messages.speeches.push(messages.speeches.shift());
 			messages.exclamations.push(messages.exclamations.shift());
 		} else {
 			message =  messages.thoughts[0];
-			message = message;
-
 			messages.thoughts.push(messages.thoughts.shift());
 		}
 		cnsts.$bubble.html('<p>' + message + '</p>').attr('class',type).show();
@@ -527,7 +476,7 @@ var sounds = {
 		if (!sounds.toLoad) {
 			notLoaded--;
 			if (!notLoaded){
-				draw.setup();
+				game.setup();
 			}
 		}
 	}
@@ -545,18 +494,14 @@ var images = {
 	thought2: 'images/thought-bg.png',
 	thought3: 'images/thought-bottom.png'
 };
-var startLoading = function() {
-	foo('startLoading',1)
+// load images IIFE
+(function () {
 	var toLoad = 0;
 	$.each(
 		images,
 		function(key, value) {
+			if (typeof value !== 'string') return false;
 			toLoad++;
-		}
-	);
-	$.each(
-		images,
-		function(key, value) {
 			var imageObj = new Image();
 			imageObj.src = value;
 			imageObj.onload = function() {
@@ -565,20 +510,13 @@ var startLoading = function() {
 				if (!toLoad) {
 					notLoaded--;
 					if (!notLoaded){
-						draw.setup();
+						game.setup();
 					}
 				}
 			};
 		}
 	);
-}
-// controls
-var $controls = $('.controls a');
-function toggleControls() {
-	foo('toggleControls',1)
-	$controls.removeClass('active').filter('[id="' + vars.direction.new + '"]').addClass('active');
-}
-toggleControls();
+}());
 // modal defaults
 $.modal.defaults.closeText = '*';
 $.modal.defaults.fadeDuration = 150;
@@ -596,39 +534,31 @@ $.scrollify({
 		}
 	}
 });
+// controls
+var $controls = $('.controls a');
+function toggleControls() {
+	foo('toggleControls',1)
+	$controls.removeClass('active').filter('[id="' + vars.direction.new + '"]').addClass('active');
+}
+toggleControls();
 // go go go
 $().ready(function() {
+	// bind clicks
 	$controls.click(
 		function(e) {
+			e.preventDefault();
 			vars.direction.new = $(this).attr('id');
 			toggleControls();
-			e.preventDefault();
 		}
 	);
-	$('a[rel="external"]').on(
+	$('.hi').on(
 		'click',
-		function() {
-			window.open(this.href);
-			return false;
+		function(e) {
+			e.preventDefault();
+			$(this).find('.one').remove();
 		}
 	);
-	$('a[data-alt]').on(
-		'mouseover mouseout',
-		function() {
-			var $this = $(this);
-			var oldHtml = $this.html();
-			var newHtml = $this.attr('data-alt');
-			$this.html(newHtml).attr('data-alt',oldHtml)
-		}
-	);
-	$.each(
-		$('img[data-file]'),
-		function(i,elem) {
-			var $img = $(elem);
-			$img.attr('src',$img.attr('data-file'))
-		}
-	);
-	$('a[data-game="start"]').on(
+	$('[data-game="start"]').on(
 		'click',
 		function(e) {
 			e.preventDefault();
@@ -638,15 +568,7 @@ $().ready(function() {
 			draw.start();
 		}
 	);
-	$('a.hi').on(
-		'click',
-		function(e) {
-			e.preventDefault();
-			var $this = $(this);
-			$this.find('.one').remove();
-		}
-	);
-	$('a[data-game="mute"]').on(
+	$('[data-game="mute"]').on(
 		'click',
 		function(e) {
 			e.preventDefault();
@@ -659,7 +581,22 @@ $().ready(function() {
 			sounds.pickup.mute(vars.isMuted)
 		}
 	);
-	// keypress
+	$('[rel="external"]').on(
+		'click',
+		function() {
+			window.open(this.href);
+			return false;
+		}
+	);
+	// load images
+	$.each(
+		$('[data-file]'),
+		function(i,elem) {
+			var $img = $(elem);
+			$img.attr('src',$img.attr('data-file'))
+		}
+	);
+	// bind keypress
 	$('html').keydown(function(e) {
 		var key = e.keyCode;
 		var oldDirection = vars.direction.new;
@@ -688,6 +625,4 @@ $().ready(function() {
 	});
 	// rescrollify
 	$.scrollify.update();
-	// start preloading
-	startLoading();
 });
