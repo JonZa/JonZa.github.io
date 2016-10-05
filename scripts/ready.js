@@ -585,7 +585,11 @@ $.modal.defaults.fadeDuration = 150;
 // update scrollify
 $.scrollify({
 	after: function() {
-		if ($.scrollify.current().attr('id') !== 'gameSection') {
+		var $current = $.scrollify.current().attr('id');
+		if (typeof ga !== 'undefined') {
+			ga('send', 'pageview', location.pathname + '#' + $current)
+		}
+		if ($current !== 'gameSection') {
 			onBlur();
 		} else {
 			onFocus();
