@@ -1,29 +1,7 @@
 // foo
-function foo(a,b){var c=0;if(!window.console||b&&!c)return!1;(void 0===a||null===a)&&(a='o_O');var d=(new Date).toUTCString().split(' ')[4];'object'==typeof a?(console.log('['+d+'] object:'),console.dir(a)):console.log('['+d+'] '+a)}
+function foo(a,b){var c=0;if(!window.console||b&&!c)return false;(void 0===a||null===a)&&(a='o_O');var d=(new Date).toUTCString().split(' ')[4];'object'==typeof a?(console.log('['+d+'] object:'),console.dir(a)):console.log('['+d+'] '+a)}
 // shuffle
 function shuffle(a){for(var c,d,b=a.length;0!==b;)d=Math.floor(Math.random()*b),b-=1,c=a[b],a[b]=a[d],a[d]=c;return a}
-// mute audio on scroll away
-function onBlur() {
-	sounds.footsteps.mute(true)
-	sounds.cat.mute(true)
-	sounds.pickup.mute(true)
-}
-// unmute audio on scroll away
-function onFocus() {
-	if (!vars.isMuted) {
-		var notGameSection = ($.scrollify.current().attr('id') !== 'gameSection');
-		sounds.footsteps.mute(notGameSection)
-		sounds.cat.mute(notGameSection)
-		sounds.pickup.mute(notGameSection)
-	}
-}
-if (/*@cc_on!@*/false) { // check for Internet Explorer
-	document.onfocusin = onFocus;
-	document.onfocusout = onBlur;
-} else {
-	window.onfocus = onFocus;
-	window.onblur = onBlur;
-}
 // constants
 var cnsts = {
 	colors: ['#cd8', '#de9'],
@@ -91,9 +69,11 @@ var vars = {
 		new: 'down',
 		changed: 0
 	},
-	isMuted: false,
-	score: 0,
+	$controls: $('.controls a'),
+	muted: false,
 	started: false,
+	paused: true,
+	score: 0,
 	tilesMoved: 0,
 	sinceMoney: 0,
 	money: [{
@@ -142,21 +122,30 @@ var gameGroup = new Konva.Group({
 	offsetY: 15
 });
 var dude = new Konva.Sprite();
-// draw
+// game
 var game = {
-	setup: function () {
+	setup: function() {
 		foo('game.setup',1)
 		draw.tiles();
 		draw.dude();
 		draw.movement();
 		$('[data-game="start"]').text('start');
-	}
-}
-var draw = {
-	start: function() {
-		foo('draw.start',1)
-		vars.started = 1;
+	},
+	pause: function() {
+		foo('game.pause',1)
+		vars.paused = true;
+		sounds.mute();
+	},
+	unPause: function() {
+		foo('game.unPause',1)
+		vars.paused = false;
+		sounds.mute();
 		dude.start();
+		draw.next();
+	},
+	play: function() {
+		foo('game.play',1)
+		vars.paused = false;
 		sounds.begin.play();
 		setTimeout(
 			function() {
@@ -165,12 +154,34 @@ var draw = {
 			,500
 		),
 		sounds.footsteps.play();
+		dude.start();
 		draw.next();
 	},
+	xy: function(object) {
+		foo('game.xy',1)
+		if (vars.direction.new === 'down') {
+			object.y -= 1;
+			object.x -= object.y % 2;
+		} else if (vars.direction.new === 'up') {
+			object.x += object.y % 2;
+			object.y += 1;
+		} else if (vars.direction.new === 'right') {
+			object.y += 1;
+			object.x -= object.y % 2;
+		} else if (vars.direction.new === 'left') {
+			object.x += object.y % 2;
+			object.y -= 1;
+		}
+		return object;
+	}
+}
+// draw
+var draw = {
 	next: function() {
 		foo('draw.next',1)
 		draw.tiles();
 		draw.movement();
+		dude.setAnimation(vars.direction.new);
 	},
 	tiles: function() {
 		foo('draw.tiles',1)
@@ -211,19 +222,7 @@ var draw = {
 		// spawn
 		gameLayer.find('.poly_' + vars.spawn.y + '_' + vars.spawn.x).fill('#fff');
 		if (vars.tilesMoved > 0) {
-			if (vars.direction.new === 'down') {
-				vars.spawn.y -= 1;
-				vars.spawn.x -= vars.spawn.y % 2;
-			} else if (vars.direction.new === 'up') {
-				vars.spawn.x += vars.spawn.y % 2;
-				vars.spawn.y += 1;
-			} else if (vars.direction.new === 'right') {
-				vars.spawn.y += 1;
-				vars.spawn.x -= vars.spawn.y % 2;
-			} else if (vars.direction.new === 'left') {
-				vars.spawn.x += vars.spawn.y % 2;
-				vars.spawn.y -= 1;
-			}
+			vars.spawn = game.xy(vars.spawn);
 		}
 		// money
 		gameLayer.find('.money').remove();
@@ -258,19 +257,7 @@ var draw = {
 			gameLayer.find('.poly_' + (vars.money[i].y - 1) + '_' + (vars.money[i].x + vars.money[i].y % 2)).fill('#efc');
 
 			if (vars.tilesMoved > 0) {
-				if (vars.direction.new === 'down') {
-					vars.money[i].y -= 1;
-					vars.money[i].x -= vars.money[i].y % 2;
-				} else if (vars.direction.new === 'up') {
-					vars.money[i].x += vars.money[i].y % 2;
-					vars.money[i].y += 1;
-				} else if (vars.direction.new === 'right') {
-					vars.money[i].y += 1;
-					vars.money[i].x -= vars.money[i].y % 2;
-				} else if (vars.direction.new === 'left') {
-					vars.money[i].x += vars.money[i].y % 2;
-					vars.money[i].y -= 1;
-				}
+				vars.money[i] = game.xy(vars.money[i]);
 			}
 			var score = 0;
 			var playerX = Math.ceil(cnsts.cols / 2) - 1;
@@ -317,7 +304,6 @@ var draw = {
 					y = Math.floor(Math.random() * (cnsts.rows + 1));
 					for (var k = 0; k < vars.money.length; k++) {
 						if (vars.money[k].x === x && vars.money[k].y === y) {
-							foo('wat')
 							j--;
 						}
 					}
@@ -346,7 +332,6 @@ var draw = {
 		var modifier = 1 + vars.score / 1000;
 		sounds.cat.rate(modifier)
 		sounds.footsteps.rate(modifier)
-		dude.frameRate = 7 + modifier * 10;
 		cnsts.$score.html(html);
 		clearTimeout(vars.timeouts.scoreUpdate);
 		vars.timeouts.scoreUpdate = setTimeout(
@@ -373,7 +358,6 @@ var draw = {
 	movement: function() {
 		foo('draw.movement',1)
 		vars.tilesMoved++;
-		dude.setAnimation(vars.direction.new);
 		var duration = 0.4;
 		if (vars.score < 1500) {
 			duration -= vars.score / 5000;
@@ -382,7 +366,7 @@ var draw = {
 		}
 		var x;
 		var y;
-		if (!vars.started) {
+		if (vars.paused) {
 			x = 0;
 			y = 0;
 		} else if (vars.direction.new === 'down') {
@@ -404,8 +388,13 @@ var draw = {
 			x: x,
 			y: y,
 			onFinish: function() {
-				if (!vars.started) return false;
-				draw.next();
+				foo('draw.movement.onFinish',1)
+				if (vars.paused) {
+					dude.frameIndex(0);
+					dude.stop();
+				} else {
+					draw.next();
+				}
 			}
 		});
 		tween.play();
@@ -442,6 +431,7 @@ var sounds = {
 		src: [ 'audio/begin.mp3', 'audio/begin.ogg' ],
 		volume: 0.5,
 		onload: function() {
+			foo('sounds.begin.onload',1)
 			sounds.loaded();
 		}
 	}),
@@ -450,6 +440,7 @@ var sounds = {
 		loop: true,
 		volume: 0.2,
 		onload: function() {
+			foo('sounds.footsteps.onload',1)
 			sounds.loaded();
 		}
 	}),
@@ -457,6 +448,7 @@ var sounds = {
 		src: [ 'audio/pickup.mp3', 'audio/pickup.ogg' ],
 		volume: 0.3,
 		onload: function() {
+			foo('sounds.pickup.onload',1)
 			sounds.loaded();
 		}
 	}),
@@ -468,10 +460,12 @@ var sounds = {
 			loop: [0, 9950]
 		},
 		onload: function() {
+			foo('sounds.cat.onload',1)
 			sounds.loaded();
 		}
 	}),
 	loaded: function() {
+		foo('sounds.loaded',1)
 		sounds.toLoad--;
 		if (!sounds.toLoad) {
 			notLoaded--;
@@ -479,14 +473,22 @@ var sounds = {
 				game.setup();
 			}
 		}
+	},
+	mute: function() {
+		foo('sounds.mute',1)
+		if (vars.paused) {
+			Howler.mute(true);
+		} else {
+			Howler.mute(vars.muted);
+		}
 	}
 }
 var images = {
-	dude: 'images/dude.gif',
-	money1: 'images/money-1.gif',
-	money2: 'images/money-2.gif',
-	money3: 'images/money-3.gif',
-	money4: 'images/money-4.gif',
+	dude: 'images/dude.png',
+	money1: 'images/money-1.png',
+	money2: 'images/money-2.png',
+	money3: 'images/money-3.png',
+	money4: 'images/money-4.png',
 	speech1: 'images/speech-top.png',
 	speech2: 'images/speech-bg.png',
 	speech3: 'images/speech-bottom.png',
@@ -494,8 +496,9 @@ var images = {
 	thought2: 'images/thought-bg.png',
 	thought3: 'images/thought-bottom.png'
 };
-// load images IIFE
-(function () {
+// load images iife
+(function() {
+	foo('iife.loadimages',1)
 	var toLoad = 0;
 	$.each(
 		images,
@@ -505,6 +508,7 @@ var images = {
 			var imageObj = new Image();
 			imageObj.src = value;
 			imageObj.onload = function() {
+				foo('iife.loadimages.' + key,1)
 				images[key] = imageObj;
 				toLoad--;
 				if (!toLoad) {
@@ -520,35 +524,52 @@ var images = {
 // modal defaults
 $.modal.defaults.closeText = '*';
 $.modal.defaults.fadeDuration = 150;
-// update scrollify
-$.scrollify({
-	after: function() {
+var page = {
+	windowChange: function() {
+		foo('page.windowChange',1);
 		var $current = $.scrollify.current().attr('id');
 		if (typeof ga !== 'undefined') {
 			ga('send', 'pageview', location.pathname + '#' + $current)
 		}
-		if ($current !== 'gameSection') {
-			onBlur();
-		} else {
-			onFocus();
+		if (vars.started) {
+			if ($current === 'gameSection' && vars.paused) {
+				game.unPause();
+			} else if (!vars.paused) {
+				game.pause();
+			}
 		}
+	},
+	toggleControls: function() {
+		foo('page.toggleControls',1);
+		vars.$controls.removeClass('active').filter('[id="' + vars.direction.new + '"]').addClass('active');
+	}
+}
+// update scrollify
+$.scrollify({
+	after: function() {
+		foo('scrollify.after',1);
+		page.windowChange();
 	}
 });
 // controls
-var $controls = $('.controls a');
-function toggleControls() {
-	foo('toggleControls',1)
-	$controls.removeClass('active').filter('[id="' + vars.direction.new + '"]').addClass('active');
-}
-toggleControls();
 // go go go
 $().ready(function() {
+	$(window).on(
+		'focusin blur',
+		function(e) {
+			if (typeof e.target.window === 'object' && e.type === 'blur') {
+				game.pause();
+			} else if (vars.paused) {
+				page.windowChange();
+			}
+		}
+	);
 	// bind clicks
-	$controls.click(
+	vars.$controls.click(
 		function(e) {
 			e.preventDefault();
 			vars.direction.new = $(this).attr('id');
-			toggleControls();
+			page.toggleControls();
 		}
 	);
 	$('.hi').on(
@@ -565,20 +586,17 @@ $().ready(function() {
 			var $this = $(this);
 			$this.closest('.content').find('.off').removeClass('off');
 			$this.parent().remove();
-			draw.start();
+			vars.started = true;
+			game.play();
 		}
 	);
 	$('[data-game="mute"]').on(
 		'click',
 		function(e) {
 			e.preventDefault();
-			foo(vars.isMuted)
-			var $this = $(this);
-			$this.toggleClass('active');
-			vars.isMuted = !vars.isMuted;
-			sounds.footsteps.mute(vars.isMuted)
-			sounds.cat.mute(vars.isMuted)
-			sounds.pickup.mute(vars.isMuted)
+			$(this).toggleClass('active');
+			vars.muted = !vars.muted;
+			sounds.mute();
 		}
 	);
 	$('[rel="external"]').on(
@@ -619,7 +637,7 @@ $().ready(function() {
 				break;
 		}
 		if (oldDirection !== vars.direction.new) {
-			vars.direction.changed = 1;
+			vars.direction.changed = true;
 			toggleControls();
 		}
 	});
